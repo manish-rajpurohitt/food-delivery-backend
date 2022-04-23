@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const Restaurant = require("../models/RestaurantModel");
 const ErrorResponse = require("../utils/errorResponse");
 
 
@@ -13,8 +13,7 @@ exports.protect = async (req, res, next)=>{
 
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
-        console.log(user);
+        const user = await Restaurant.findById(decoded.id);
 
         if(!user)
             return next(new ErrorResponse("No User found with this id", 404));

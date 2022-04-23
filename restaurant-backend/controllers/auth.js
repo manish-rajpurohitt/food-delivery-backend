@@ -1,22 +1,18 @@
-const User = require('../models/User');
+const Restaurant = require('../models/RestaurantModel');
 const ErrorResponse = require('../utils/errorResponse');
 const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
 
 exports.register = async (req, res, next) => {
-    let {restaurantName, userName, userPhoneNumber, restaurantPhoneNumber, email, pan, city, password, address, restaurantType } = req.body;
+    let { pincode, email, password, restaurantName, userPhoneNumber, userName } = req.body;
     try{
-        const user = await User.create({
-            email : email.toLowerCase(), 
-            restaurantName, 
-            userName, 
+        const user = await Restaurant.create({
+            email : email.toLowerCase(),
+            password,
+            pincode,
+            restaurantName,
             userPhoneNumber, 
-            restaurantPhoneNumber, 
-            pan, 
-            city, 
-            password, 
-            address, 
-            restaurantType,
+            userName,
             addedOn : Date.now(),
             updatedOn : Date.now()
         });
@@ -33,7 +29,7 @@ exports.login = async (req, res, next) => {
     if(!email || !password)
        return next(new ErrorResponse("Please provide email and password.", 400))
     try{
-        const user = await User.findOne({email}).select("+password");
+        const user = await Restaurant.findOne({email}).select("+password");
         if(!user)
             return next(new ErrorResponse("Invalid credentials", 401))
        const isMatched = user.matchPasswords(password);
@@ -56,7 +52,7 @@ exports.forgotpassword = async (req, res, next) => {
     console.log(email);
 
     try{
-        const user = await User.findOne({email});
+        const user = await Restaurant.findOne({email});
         if(!user)
             return next(new ErrorResponse("Email couldn't be send", 404));
         const resetToken = user.getResetPasswordToken();
@@ -93,7 +89,7 @@ exports.resetpassword = async (req, res, next) => {
     const resetPasswordToken = crypto.createHash("sha256").update(req.params.resetToken).digest("hex");
 
     try{
-        const user = await User.findOne({
+        const user = await Restaurant.findOne({
             resetPasswordToken,
             resetPasswordExpire: {$gt: Date.now()}
         })

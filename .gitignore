@@ -4145,3 +4145,5 @@ restaurant-backend/node_modules/yocto-queue/license
 restaurant-backend/node_modules/yocto-queue/package.json
 restaurant-backend/node_modules/yocto-queue/readme.md
 restaurant-backend/package-lock.json
+restaurant-backend/.env
+restaurant-backend/.env

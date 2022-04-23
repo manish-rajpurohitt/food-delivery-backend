@@ -4,6 +4,65 @@ const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const Address = require("./Address");
 
+const CategorySchema = new mongoose.Schema({
+    categoryName: {
+        type: String,
+        required: [true, "Category name is required"]
+    },
+    addedOn:{
+        type: Date,
+        default: Date.now()
+    }
+})
+
+const FoodItemSchema = new mongoose.Schema({
+    foodName: {
+        type: String,
+        required: [true, "Food name cannot be empty"]
+    },
+    category:{
+        type: CategorySchema,
+        required: [true, "Cannot add food without category"]
+    },
+    ingredients:{
+        type: Array
+    },
+    price:{
+        type: Number,
+        required: [true, "price is a necessary field"]
+    },
+    discount:{
+        type: String
+    },
+    isVegetarian:{
+        type: Boolean,
+        required:[true, "Vegetarian status is required"]
+    },
+    image:{
+        type: String
+    },
+    ratings:{
+        type: Number
+    },
+    requiredTax:{
+        type: Boolean,
+        required: [true, "please mention tax is required or not"]
+    },
+    taxInPercentage:{
+        type: String
+    },
+    addedOn:{
+        type: Date,
+        default: Date.now()
+    },
+    updatedOn:{
+        type: Date,
+        default: Date.now()
+    }
+});
+
+
+
 const RestaurantSchema = new mongoose.Schema({
     restaurantName : {
         type:String,
@@ -19,9 +78,10 @@ const RestaurantSchema = new mongoose.Schema({
         unique: true
     },
     restaurantPhoneNumber : {
-        type:Number,
-        required : [true, "Please Provide Phone Number."],
-        unique: true
+        type:Number
+    },
+    restaurantLocation:{
+        type: Object
     },
     email : {
         type:String,
@@ -34,11 +94,9 @@ const RestaurantSchema = new mongoose.Schema({
     },
     pan:{
         type: String,
-        required: [true, "Pan number is required"]
     },
     city:{
         type: String,
-        required: [true, "City is a required field"]
     },
     password: {
         type:String,
@@ -46,18 +104,25 @@ const RestaurantSchema = new mongoose.Schema({
         minlength:6,
         select: false
     },
+    restaurentItems: {
+        type: [FoodItemSchema]
+    },
     resetPasswordToken : String,
     resetPasswordExpire : Date,
+    pincode: {
+        type: Number,
+    },
     addedOn:{
         type: Date
     },
-    address : [Address],
+    address : {
+        type: Address
+    },
     restaurantType:{
         type: String,
-        required: [true, 'Restaurant Type is required.']
     },
     categories:{
-        type: Array
+        type: [CategorySchema]
     },
     updatedOn: {
         type: Date,
