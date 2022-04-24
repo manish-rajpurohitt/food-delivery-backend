@@ -3,64 +3,8 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const Address = require("./Address");
-
-const CategorySchema = new mongoose.Schema({
-    categoryName: {
-        type: String,
-        required: [true, "Category name is required"]
-    },
-    addedOn:{
-        type: Date,
-        default: Date.now()
-    }
-})
-
-const FoodItemSchema = new mongoose.Schema({
-    foodName: {
-        type: String,
-        required: [true, "Food name cannot be empty"]
-    },
-    category:{
-        type: CategorySchema,
-        required: [true, "Cannot add food without category"]
-    },
-    ingredients:{
-        type: Array
-    },
-    price:{
-        type: Number,
-        required: [true, "price is a necessary field"]
-    },
-    discount:{
-        type: String
-    },
-    isVegetarian:{
-        type: Boolean,
-        required:[true, "Vegetarian status is required"]
-    },
-    image:{
-        type: String
-    },
-    ratings:{
-        type: Number
-    },
-    requiredTax:{
-        type: Boolean,
-        required: [true, "please mention tax is required or not"]
-    },
-    taxInPercentage:{
-        type: String
-    },
-    addedOn:{
-        type: Date,
-        default: Date.now()
-    },
-    updatedOn:{
-        type: Date,
-        default: Date.now()
-    }
-});
-
+const FoodItemSchema = require("./FoodItem");
+const CategorySchema = require("./Category");
 
 
 const RestaurantSchema = new mongoose.Schema({
@@ -104,7 +48,7 @@ const RestaurantSchema = new mongoose.Schema({
         minlength:6,
         select: false
     },
-    restaurentItems: {
+    restaurantItems: {
         type: [FoodItemSchema]
     },
     resetPasswordToken : String,
