@@ -4,7 +4,6 @@ const Restaurant = require('../models/RestaurantModel');
 exports.createSession = async (req, res, next) => {
     try{
         let cart = await Cart.create({});
-        console.log(cart);
         res.status(201).json({
             success: "true",
             data: cart._id
@@ -37,10 +36,10 @@ exports.addFoodToCart = async (req, res, next) => {
             total += (parseFloat(product.productDetails.price) * product.quantity);
         })
         
-        console.log(cart);
 
         cart.products = cartProducts;
         cart.netTotal = total;
+        cart.restaurantId = restaurantId;
         cart.save();
 
         res.status(201).json({

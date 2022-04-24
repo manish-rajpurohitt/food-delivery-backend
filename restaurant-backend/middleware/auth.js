@@ -14,7 +14,7 @@ exports.protect = async (req, res, next)=>{
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await Restaurant.findById(decoded.id);
-
+        console.log(user);
         if(!user)
             return next(new ErrorResponse("No User found with this id", 404));
         req.user = user

@@ -10,7 +10,7 @@ const ProductSchema = mongoose.Schema({
     }
 })
 const CartSchema = mongoose.Schema({
-    restaurant:{
+    restaurantId:{
         type: String
     },
     products:{

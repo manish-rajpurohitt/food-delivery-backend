@@ -5,7 +5,6 @@ const FoodItemSchema = new mongoose.Schema({
     foodName: {
         type: String,
         required: [true, "Food name cannot be empty"],
-        unique: true
     },
     category:{
         type: CategorySchema,

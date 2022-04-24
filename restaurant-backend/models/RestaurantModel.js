@@ -19,7 +19,6 @@ const RestaurantSchema = new mongoose.Schema({
     userPhoneNumber : {
         type:Number,
         required : [true, "Please Provide Phone Number."],
-        unique: true
     },
     restaurantPhoneNumber : {
         type:Number
@@ -70,7 +69,7 @@ const RestaurantSchema = new mongoose.Schema({
     },
     updatedOn: {
         type: Date,
-        default : Date.now
+        default : Date.now()
     }
 });
 

@@ -18,6 +18,9 @@ const DeliverySchema = new mongoose.Schema({
     riderAddress:{
         type: Address
     },
+    ordersHistory:{
+        type: Array
+    },
     email : {
         type:String,
         required: [true, "Please provide email"],
