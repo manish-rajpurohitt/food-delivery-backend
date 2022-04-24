@@ -7,13 +7,13 @@ const {
     resetpassword
 } = require('../controllers/auth');
 
-router.route("/registerRider").post(register);
+router.route("/registerCustomer").post(register);
 
-router.route('/loginRider').post(login);
+router.route('/loginCustomer').post(login);
 
-router.route('/forgotPasswordRider').post(forgotpassword);
+router.route('/forgotPasswordCustomer').post(forgotpassword);
 
-router.route('/resetPasswordRider/:resetToken').put(resetpassword);
+router.route('/resetPasswordCustomer/:resetToken').put(resetpassword);
 
 
 

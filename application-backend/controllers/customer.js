@@ -1,18 +1,18 @@
 const ErrorResponse = require("../utils/errorResponse");
 const User = require("../models/UserModel");
+const Restaurant = require("../models/RestaurantModel");
 
 
-exports.addRiderDetails = async (req, res, next) => {
+exports.addUserDetails = async (req, res, next) => {
     try{
-        let { riderPhoneNumber, riderName, currentLocation, pan, city, riderAddress } = req.body;
+        let { customerPhoneNumber, customerName, currentLocation, city, customerAddress } = req.body;
         let restaurant = await User.findOne({email: req.user.email});
         await restaurant.updateOne({
-            riderPhoneNumber,
-            pan,
+            customerPhoneNumber,
+            customerName,
             city,
-            riderName,
             currentLocation,
-            riderAddress
+            customerAddress
         });
         res.status(201).json({
             success: true,
@@ -26,9 +26,9 @@ exports.addRiderDetails = async (req, res, next) => {
 
 exports.updateCurrentGeoLocation = async(req, res, next) => {
     try{
-        let rider = await Riders.findOne({email: req.user.email});
-        rider.currentLocation = req.body.currentLocation;
-        rider.save();
+        let user = await User.findOne({email: req.user.email});
+        user.currentLocation = req.body.currentLocation;
+        user.save();
         res.status(201).json({
             success: 'true',
             data: "Locaion updated successfully"
@@ -39,3 +39,17 @@ exports.updateCurrentGeoLocation = async(req, res, next) => {
     }
 }
 
+
+exports.getAllRestaurantWithCity = async (req, res, next) => {
+    try{
+        let cityName = req.body.city;
+        let restaurant = await Restaurant.find({city: cityName});
+        res.status(201).json({
+            success: 'true',
+            data: restaurant
+        })
+    }
+    catch(e){
+        next();
+    }
+}

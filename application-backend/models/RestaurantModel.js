@@ -3,20 +3,29 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const Address = require("./Address");
+const FoodItemSchema = require("./FoodItem");
+const CategorySchema = require("./Category");
 
-const UserSchema = new mongoose.Schema({
-    customerName : {
+
+const RestaurantSchema = new mongoose.Schema({
+    restaurantName : {
         type:String,
+        required: [true, "Please provide a first name"]
     },
-    customerPhoneNumber : {
+    userName : {
+        type:String,
+        required: [true, "Please provide a last name"]
+    },
+    userPhoneNumber : {
         type:Number,
+        required : [true, "Please Provide Phone Number."],
         unique: true
     },
-    currentLocation:{
-        type: Object
+    restaurantPhoneNumber : {
+        type:Number
     },
-    customerAddress:{
-        type: Address
+    restaurantLocation:{
+        type: Object
     },
     email : {
         type:String,
@@ -27,6 +36,9 @@ const UserSchema = new mongoose.Schema({
             "Please provide a valid email"
         ]
     },
+    pan:{
+        type: String,
+    },
     city:{
         type: String,
     },
@@ -36,14 +48,25 @@ const UserSchema = new mongoose.Schema({
         minlength:6,
         select: false
     },
+    restaurantItems: {
+        type: [FoodItemSchema]
+    },
     resetPasswordToken : String,
     resetPasswordExpire : Date,
     pincode: {
         type: Number,
-        required: [true, "Please provide pincode"]
     },
     addedOn:{
         type: Date
+    },
+    address : {
+        type: Address
+    },
+    restaurantType:{
+        type: String,
+    },
+    categories:{
+        type: [CategorySchema]
     },
     updatedOn: {
         type: Date,
@@ -51,7 +74,9 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-UserSchema.pre("save", async function(next){
+
+
+RestaurantSchema.pre("save", async function(next){
     if(!this.isModified("password")){
         next();
     }
@@ -61,23 +86,22 @@ UserSchema.pre("save", async function(next){
     next();
 })
 
-UserSchema.methods.matchPasswords = async function(password){
+RestaurantSchema.methods.matchPasswords = async function(password){
     return await bcrypt.compare(password, this.password);
 }
 
-UserSchema.methods.getSignedToken = function(){
+RestaurantSchema.methods.getSignedToken = function(){
     return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE
     });
 }
 
-UserSchema.methods.getResetPasswordToken = function(){
+RestaurantSchema.methods.getResetPasswordToken = function(){
     const resetToken = crypto.randomBytes(20).toString("hex");
     this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
     this.resetPasswordExpire = Date.now() + 10 * (60 * 1000);
     return resetToken;
 }
+const Restaurant = mongoose.model("Restaurants", RestaurantSchema);
 
-const Customers = mongoose.model("Customers", UserSchema);
-
-module.exports = Customers;
+module.exports = Restaurant
