@@ -24,6 +24,13 @@ exports.acceptOrderDelivery = async (req, res, next) => {
         let orderId = req.body.orderId;
         let rider = await Riders.findOne({_id: req.user._id}) 
         let order = await Order.findOne({_id:orderId });
+        if(order.deliveryStatus === "RIDER_ASSIGNED"){
+        res.status(500).json({
+            success: false,
+            data: "Order already Accepted"
+        });
+        return;
+        }
         order.deliveryStatus = "RIDER_ASSIGNED";
         order.riderDetails = rider;
         order.isPrepaid = true;
@@ -84,7 +91,7 @@ exports.updateOrderDeliveryStatus = async (req, res, next) => {
         order.save();
         res.status(201).json({
             success: "true",
-            data: deliveryStatus
+            data: order
         });
     }
     catch(e){
