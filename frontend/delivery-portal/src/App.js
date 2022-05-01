@@ -5,16 +5,24 @@ import Body from "./components/Body/Body";
 import SignUp from './components/SignUp/SignUp';
 import SignIn from './components/SignIn/SignIn';
 import { Routes, Route, Link } from "react-router-dom";
+import { CartProvider } from './CartContext';
+import {useAuth} from './UserContext';
 
 function App() {
+
+  const {loggedIn} = useAuth(); 
   return (
+    <CartProvider>
   <div className="App">
-  <h1>Welcome to React Router!</h1>
+  <Header loggedIn={loggedIn}/>
   <Routes>
     <Route path="/SignUp" element={<SignUp />} />
     <Route path="/SignIn" element={<SignIn />} />
+    <Route path="/" element={<Body loggedIn={loggedIn}/>}/>
   </Routes>
+  <Footer/>
 </div>
+</CartProvider>
   );
 }
 
