@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+const axios = require('axios').default;
 
 function Copyright(props) {
   return (
@@ -27,16 +28,43 @@ function Copyright(props) {
 }
 
 const theme = createTheme();
-
+const BASE_URL = "http://localhost:5000/api/delivery/auth"
 export default function SignUp() {
+  const [city, setCity] = React.useState("");
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    let body = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+      pincode: document.getElementById('pincode').value
+    }
+    console.log(body)
+    axios.post(BASE_URL+"/registerRider", body)
+    .then(response => {
+      console.log(response);
+    }).catch(function (error) {
+      // handle error
+      console.log(error);
+    })
   };
+
+  const fetchCity = async (event)=>{
+    event.preventDefault();
+    axios.get("https://api.postalpincode.in/pincode/"+ document.getElementById("pincode").value)
+  .then(function (response) {
+    // handle success
+    setCity(response.data[0].PostOffice[0].District);
+
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .then(function () {
+    // always executed
+  });
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -58,27 +86,6 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -100,10 +107,35 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  type={"tel"}
+                  maxLength={"6"}
+                  id="pincode"
+                  label="Pincode"
+                  name="Pincode"
+                  inputProps={
+                    {maxLength: 6}
+                  }
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Button variant="contained" onClick={(e)=>fetchCity(e)}>Fetch City</Button>
+              </Grid>
+
+              <Grid item xs={12} sm={10}>
+                <TextField
+                  required
+                  fullWidth
+                  placeholder='city'
+                  id="city"
+                  name="City"
+                  value={city}
+                  autoComplete="family-name"
+                  disabled
                 />
               </Grid>
             </Grid>

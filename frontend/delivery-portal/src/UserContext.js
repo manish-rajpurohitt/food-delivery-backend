@@ -1,20 +1,38 @@
 import React, {createContext, useEffect,useState} from "react";
 
-const sleep = mill => {
-    return new Promise(resolve => setTimeout(resolve, mill));
-};
+const axios = require('axios').default;
+
+const BASE_URL = "http://localhost:5000/api/delivery";
+
+
 
 const AuthContext = createContext({});
 
 const AuthProvider = props => {
     const [loggedIn, setLoggedIn] = useState(false);
-
-    const login = () => {
-        sleep(2000).then(()=> setLoggedIn(true))
+    const instance = axios.create({
+        baseURL: BASE_URL,
+        timeout: 1000,
+        headers: {'X-Custom-Header': 'foobar'}
+      });
+    const login = (user) => {
+        instance.post('/auth/loginRider', {
+            email: user.email,
+            password: user.password
+          })
+          .then(function (response) {
+            localStorage.setItem("auth", response.data);
+            setLoggedIn(true);
+            return true;
+          })
+          .catch(function (error) {
+            console.log(error);
+            return false;
+          });
     }
 
     const logout = () =>{
-        sleep(2000).then(()=> setLoggedIn(false))
+        setLoggedIn(false);
     }
     useEffect(()=>{
         

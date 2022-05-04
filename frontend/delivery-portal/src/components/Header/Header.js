@@ -5,11 +5,9 @@ import Link from '@mui/material/Link';
 import {useAuth} from "../../UserContext";
 
 
-function Header(props) {
-const {logout, login} = useAuth();
+function Header() {
+const {logout, login, loggedIn} = useAuth();
 
-
-  const {loggedIn} = {...props};
   console.log(loggedIn)
   return (
     <div className='header'>
@@ -18,12 +16,16 @@ const {logout, login} = useAuth();
         {
           loggedIn?
           <>
-          <Button onClick={logout()}>Log out</Button>
+          <Button onClick={()=>logout()}>Log out</Button>
           </> 
           : 
           <>
-        <Button onClick={login()}>Log in</Button>
-        <Button>Sign up</Button>
+        <Link href="/SignIn">
+          <Button >Log in</Button>
+        </Link>
+        <Link href="/SignUp">
+          <Button>Sign up</Button>
+        </Link>
         </>
         }
         

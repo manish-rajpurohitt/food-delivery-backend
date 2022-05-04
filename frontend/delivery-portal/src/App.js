@@ -14,10 +14,10 @@ function App() {
   return (
     <CartProvider>
   <div className="App">
-  <Header loggedIn={loggedIn}/>
+  <Header />
   <Routes>
-    <Route path="/SignUp" element={<SignUp />} />
-    <Route path="/SignIn" element={<SignIn />} />
+    <Route path='/SignIn' element={<SignIn />}/>
+    <Route path='/SignUp' element={<SignUp />}/>
     <Route path="/" element={<Body loggedIn={loggedIn}/>}/>
   </Routes>
   <Footer/>
