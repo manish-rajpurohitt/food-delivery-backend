@@ -1,11 +1,11 @@
 const express = require('express');
 const { addRiderDetails, updateCurrentGeoLocation } = require('../controllers/delivery');
-const { protect } = require('../middleware/auth');
+const { protectRider } = require('../middleware/auth');
 const router =  express.Router();
 
-router.route("/addRiderDetails").post(protect, addRiderDetails);
+router.route("/addRiderDetails").post(protectRider, addRiderDetails);
 
-router.route("/updateCurrentGeoLocation").post(protect, updateCurrentGeoLocation);
+router.route("/updateCurrentGeoLocation").post(protectRider, updateCurrentGeoLocation);
 
 
 module.exports = router;

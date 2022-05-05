@@ -15,24 +15,27 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useAuth} from "../../UserContext";
 import { useNavigate } from "react-router-dom";
 
+
 function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+    return (
+      <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        {'Copyright © '}
+        <Link color="inherit" href="https://mui.com/">
+          Your Website
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    );
+  }
+  
+  const theme = createTheme();
 
-const theme = createTheme();
+  
 
+function ForgotPassword() {
 
-export default function SignIn() {
-  let {loggedIn, login} = useAuth();
+    let {loggedIn, login, forgotPassword} = useAuth();
   const navigate = useNavigate();   
 
     React.useEffect(()=>{
@@ -43,10 +46,7 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    login({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+      forgotPassword(data.get('email'));
   };
 
   return (
@@ -65,8 +65,9 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Forgot Password.
           </Typography>
+
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -78,34 +79,15 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Send reset link
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="/ForgotPassword" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/SignUp" variant="body2">
                   {"Don't have an account? Sign Up"}
@@ -117,5 +99,7 @@ export default function SignIn() {
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
-  );
+  )
 }
+
+export default ForgotPassword

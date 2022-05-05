@@ -7,8 +7,8 @@ import {useAuth} from "../../UserContext";
 
 function Header() {
 const {logout, login, loggedIn} = useAuth();
+console.log(loggedIn)
 
-  console.log(loggedIn)
   return (
     <div className='header'>
       <h1>Delivery portal</h1>
@@ -28,11 +28,6 @@ const {logout, login, loggedIn} = useAuth();
         </Link>
         </>
         }
-        
-        <Link href="/Cart">
-        <Button>Cart</Button>
-        <span>0</span>
-        </Link>
       </div>
     </div>
   )

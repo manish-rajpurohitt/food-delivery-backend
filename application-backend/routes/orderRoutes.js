@@ -1,24 +1,24 @@
 const express = require("express");
 const { createOrderFromSessionId } = require("../controllers/orders");
-const { protect } = require("../middleware/auth");
+const { protectCustomer, protectRider, protectRestauant } = require("../middleware/auth");
 const {getAllAvailableOrders, acceptOrderDelivery, updateOrderDeliveryStatus} = require("../controllers/orders");
 const router = express.Router();
 const { acceptOrderRestaurant, getOrderStatus } = require("../controllers/orders");
 
 
 
-router.route("/createOrder").post(protect, createOrderFromSessionId);
+router.route("/createOrder").post(protectCustomer, createOrderFromSessionId);
 
 //rider
-router.route("/getAllAvailableOrders").post(protect, getAllAvailableOrders);
+router.route("/getAllAvailableOrders").post(protectRider, getAllAvailableOrders);
 
-router.route("/acceptOrderDelivery").post(protect, acceptOrderDelivery);
+router.route("/acceptOrderDelivery").post(protectRider, acceptOrderDelivery);
 
-router.route("/updateOrderDeliveryStatus").post(protect, updateOrderDeliveryStatus);
+router.route("/updateOrderDeliveryStatus").post(protectRider, updateOrderDeliveryStatus);
 
 //restaurant
-router.route("/acceptOrderRestaurant").post(protect, acceptOrderRestaurant);
+router.route("/acceptOrderRestaurant").post(protectRestauant, acceptOrderRestaurant);
 
-router.route("/getOrderStatus").post(protect, getOrderStatus);
+router.route("/getOrderStatus").post(protectRestauant, getOrderStatus);
 
 module.exports = router;

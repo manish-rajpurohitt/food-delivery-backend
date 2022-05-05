@@ -10,6 +10,9 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from "react-router-dom";
+import {useAuth} from "../../UserContext";
+
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 const axios = require('axios').default;
@@ -30,6 +33,15 @@ function Copyright(props) {
 const theme = createTheme();
 const BASE_URL = "http://localhost:5000/api/delivery/auth"
 export default function SignUp() {
+  let {loggedIn, login} = useAuth();
+
+  React.useEffect(()=>{
+    if(loggedIn){
+      navigate("/Home");
+    }
+  },[loggedIn])
+
+  const navigate = useNavigate();
   const [city, setCity] = React.useState("");
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -42,7 +54,7 @@ export default function SignUp() {
     console.log(body)
     axios.post(BASE_URL+"/registerRider", body)
     .then(response => {
-      console.log(response);
+      navigate("/Signin")
     }).catch(function (error) {
       // handle error
       console.log(error);

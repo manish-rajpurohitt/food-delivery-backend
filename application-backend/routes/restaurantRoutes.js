@@ -8,20 +8,20 @@ const { addRestaurantDetails,
         enableDeliveryForFoodItem } = require('../controllers/restaurant');
 
 const router =  express.Router();
-const { protect } = require("../middleware/auth");
+const { protectRestauant } = require("../middleware/auth");
 
-router.route("/AddRestaurantDetails").post(protect, addRestaurantDetails);
+router.route("/AddRestaurantDetails").post(protectRestauant, addRestaurantDetails);
 
-router.route("/AddFoodItem").post(protect, addFoodItem);
+router.route("/AddFoodItem").post(protectRestauant, addFoodItem);
 
-router.route("/getAllFoodItems").get(protect, getAllFoodItems);
+router.route("/getAllFoodItems").get(protectRestauant, getAllFoodItems);
 
-router.route("/getAllFoodCategories").get(protect, getAllFoodCategories);
+router.route("/getAllFoodCategories").get(protectRestauant, getAllFoodCategories);
 
-router.route("/deleteFoodItem").post(protect, deleteFoodItem);
+router.route("/deleteFoodItem").post(protectRestauant, deleteFoodItem);
 
-router.route("/disableDeliveryForFoodItem").post(protect, disableDeliveryForFoodItem)
+router.route("/disableDeliveryForFoodItem").post(protectRestauant, disableDeliveryForFoodItem)
 
-router.route("/enableDeliveryForFoodItem").post(protect, enableDeliveryForFoodItem)
+router.route("/enableDeliveryForFoodItem").post(protectRestauant, enableDeliveryForFoodItem)
 
 module.exports = router;

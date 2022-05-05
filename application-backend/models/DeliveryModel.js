@@ -9,8 +9,7 @@ const DeliverySchema = new mongoose.Schema({
         type:String,
     },
     riderPhoneNumber : {
-        type:Number,
-        unique: true
+        type:Number
     },
     currentLocation:{
         type: Object
