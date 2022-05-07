@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,46 +19,46 @@ import MuiAlert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-  
-  const theme = createTheme();
-
-  
-  const Alert = React.forwardRef(function Alert(props, ref) {
+const theme = createTheme();
+ 
+const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
+function PasswordReset({match}) {
+    let {resetPassword} = useAuth();
+    const [open, setOpen] = React.useState();
+    const [error, setError] = React.useState(false);
 
-  
-function ForgotPassword() {
+    const navigate = useNavigate();   
 
-    let {loggedIn, forgotPassword} = useAuth();
-    const [error, setOpen] = React.useState();
-
-  const navigate = useNavigate();   
-
-    React.useEffect(()=>{
-      if(loggedIn){
-        navigate("/Home");
-      }
-    },[loggedIn])
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-      if( await forgotPassword(data.get('email'))){
-        console.log("open")
-        setOpen(true);
-      }else{
-        setOpen(false)
-      }
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
+    if(data.get("password") === data.get("repeatpassword")){
+        let token = window.location.pathname.split("/")[2];
+        let res = await resetPassword(data.get("password"), token);
+        if(res){
+            setError(false);
+            setOpen(true);
+            navigate("/")
+        }else{
+            setError(true);
+            setOpen(true);
+        }
     }
-
-    setOpen(false);
+    else{
+        setOpen(true);
+        setError(true);
+    }
   };
 
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+      };
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -75,7 +75,7 @@ function ForgotPassword() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Forgot Password.
+            Enter Your New Password
           </Typography>
 
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -83,10 +83,20 @@ function ForgotPassword() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="password"
+              label="New Password"
+              name="password"
+              autoComplete="password"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="repeatpassword"
+              label="Repeat Password"
+              name="repeatpassword"
+              autoComplete="password"
               autoFocus
             />
             <Button
@@ -95,7 +105,7 @@ function ForgotPassword() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Send reset link
+              Submit New Password
             </Button>
             <Grid container>
               <Grid item>
@@ -107,13 +117,19 @@ function ForgotPassword() {
           </Box>
         </Box>
       </Container>
-      <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          This is a success message!
-        </Alert>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          {
+              error?<Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+              Password not match or token is Invalid
+            </Alert>:
+            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            This is a success message!
+          </Alert>
+          }
+        
       </Snackbar>
     </ThemeProvider>
   )
 }
 
-export default ForgotPassword
+export default PasswordReset

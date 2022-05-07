@@ -109,14 +109,6 @@ exports.resetpassword = async (req, res, next) => {
     }
 }
 
-const sendToken = (user, statusCode, res)=>{
-    const token = user.getSignedToken(); 
-    res.status(statusCode).json({
-        success: true,
-        token
-    })
-}
-
 
 //rider
 exports.registerRider = async (req, res, next) => {
@@ -163,12 +155,13 @@ exports.loginRider = async (req, res, next) => {
 
 exports.forgotpasswordRider = async (req, res, next) => {
     const {email} = req.body;
-    console.log(email);
 
     try{
         const user = await Riders.findOne({email});
+
         if(!user)
-            return next(new ErrorResponse("Email couldn't be send", 404));
+            return next(new ErrorResponse("User not registered", 404));
+        
         const resetToken = user.getResetPasswordToken();
 
         await user.save();
@@ -177,7 +170,7 @@ exports.forgotpasswordRider = async (req, res, next) => {
         const message = resetUrl;
 
         try{
-            await sendEmail({
+            sendEmail({
                 to:user.email,
                 subject: "Password Reset Request",
                 text: message
@@ -185,6 +178,8 @@ exports.forgotpasswordRider = async (req, res, next) => {
 
             res.status(200).json({success: true, data:"Email sent"})
         }catch(e){
+            console.log(e);
+
             user.resetPasswordToken = undefined;
             user.resetPasswordExpire = undefined;
 
@@ -200,7 +195,7 @@ exports.forgotpasswordRider = async (req, res, next) => {
 
 exports.resetpasswordRider = async (req, res, next) => {
     const resetPasswordToken = crypto.createHash("sha256").update(req.params.resetToken).digest("hex");
-
+    console.log(req.params.resetToken)
     try{
         const user = await Riders.findOne({
             resetPasswordToken,
@@ -330,4 +325,16 @@ exports.resetpasswordRestaurant = async (req, res, next) => {
     }catch(e){
         next(e)
     }
+}
+
+
+
+
+
+const sendToken = (user, statusCode, res)=>{
+    const token = user.getSignedToken(); 
+    res.status(statusCode).json({
+        success: true,
+        token
+    })
 }

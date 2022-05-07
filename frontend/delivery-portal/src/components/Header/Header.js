@@ -3,11 +3,12 @@ import React from 'react'
 import "./Header.css"
 import Link from '@mui/material/Link';
 import {useAuth} from "../../UserContext";
+import { useNavigate } from 'react-router';
 
 
 function Header() {
 const {logout, login, loggedIn} = useAuth();
-console.log(loggedIn)
+const navigate = useNavigate();
 
   return (
     <div className='header'>
@@ -16,6 +17,8 @@ console.log(loggedIn)
         {
           loggedIn?
           <>
+          <Button onClick={()=>navigate("/Home")}>Home</Button>
+          <Button onClick={()=>navigate("/Profile")}>Profile</Button>
           <Button onClick={()=>logout()}>Log out</Button>
           </> 
           : 

@@ -36,19 +36,43 @@ const AuthProvider = props => {
         setLoggedIn(false);
     }
 
-    const forgotPassword = (email) =>{
-      instance.post('/auth/forgotPasswordRider', {
+    const forgotPassword = async (email) =>{
+      let res = await instance.post('/auth/forgotPasswordRider', {
         email: email
       })
       .then(function (response) {
-        console.log(response.data)
-        return true;
+        if(response.data.data === "User not registered")
+          return false;
+        if(response.data.data === "Email sent")
+          return true;
       })
       .catch(function (error) {
         console.log(error);
         return false;
       });
+      return res;
     }
+
+    const resetPassword = async (pass, token)=> {
+        let res = await instance.put('/auth/resetPasswordRider/'+token, {
+                    password: pass
+                  })
+                  .then(function (response) {
+                    if(response.data.data === "Invalid reset token"){
+                      return false;
+                    }
+                    if(response.data.data === "Password reset success")
+                    return true;
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    return false;
+                  });
+      return res;
+    }
+
+
+
     useEffect(()=>{
       console.log(localStorage.getItem('auth'))
         if(localStorage.getItem('auth') !== null){
@@ -59,7 +83,8 @@ const AuthProvider = props => {
         login,
         loggedIn,
         logout,
-        forgotPassword
+        forgotPassword,
+        resetPassword
     };
     return <AuthContext.Provider value={authContextValue} {...props} />;
 }
