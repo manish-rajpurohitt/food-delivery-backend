@@ -16,6 +16,7 @@ router.route("/acceptOrderDelivery").post(protectRider, acceptOrderDelivery);
 
 router.route("/updateOrderDeliveryStatus").post(protectRider, updateOrderDeliveryStatus);
 
+
 //restaurant
 router.route("/acceptOrderRestaurant").post(protectRestauant, acceptOrderRestaurant);
 

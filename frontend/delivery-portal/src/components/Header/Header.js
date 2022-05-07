@@ -13,23 +13,23 @@ const navigate = useNavigate();
   return (
     <div className='header'>
       <h1>Delivery portal</h1>
-      <div>
+      <div className='header-inner'>
         {
           loggedIn?
-          <>
+          <div className='LoggedIn'>
           <Button onClick={()=>navigate("/Home")}>Home</Button>
           <Button onClick={()=>navigate("/Profile")}>Profile</Button>
           <Button onClick={()=>logout()}>Log out</Button>
-          </> 
+          </div> 
           : 
-          <>
+          <div className='LoggedOut'>
         <Link href="/SignIn">
           <Button >Log in</Button>
         </Link>
         <Link href="/SignUp">
           <Button>Sign up</Button>
         </Link>
-        </>
+        </div>
         }
       </div>
     </div>

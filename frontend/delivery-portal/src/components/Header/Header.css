@@ -1,0 +1,10 @@
+.LoggedIn{
+    display: flex;
+    flex-direction: row;
+}
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border:2px;
+}

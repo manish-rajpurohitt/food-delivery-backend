@@ -1,0 +1,17 @@
+.cards{
+}
+.order{
+    border: 2px solid;
+    width: fit-content;
+    margin: 5%;
+
+}
+.order-id{
+    font-size: 15px;
+    margin: 2%;
+}
+
+.restaurant-details, .payment-status{
+    width: fit-content;
+    margin: 2%
+}

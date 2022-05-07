@@ -5,7 +5,6 @@ const CartContext = createContext();
 export function CartProvider({children}){
 
     const [items, setItems] = React.useState([]);
-
     const addToCart = (product) =>{
         setItems((prev) => [...prev, product])
     }

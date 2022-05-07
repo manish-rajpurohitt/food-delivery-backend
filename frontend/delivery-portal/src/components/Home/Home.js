@@ -2,6 +2,7 @@ import React from 'react'
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Card  from './Card.js';
 
 function Home() {
 
@@ -123,13 +124,13 @@ function Home() {
    const [allOrders, updateAllOrders] = React.useState([]);
 
   React.useEffect(()=>{
-
+    
   }, [])
   return (
     <React.Fragment>
     <Container fixed>
       <Box sx={{ bgcolor: '#cfe8fc', width:'100%', height: '100vh' }} >
-        <h1>All Available Local Orders</h1>
+        <Card/>
       </Box>
 
 

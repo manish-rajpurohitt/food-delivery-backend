@@ -10,6 +10,7 @@ const AuthContext = createContext({});
 
 const AuthProvider = props => {
     const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState({});
     const instance = axios.create({
         baseURL: BASE_URL,
         timeout: 1000,

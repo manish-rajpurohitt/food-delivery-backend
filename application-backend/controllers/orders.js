@@ -63,20 +63,21 @@ exports.acceptOrderDelivery = async (req, res, next) => {
         let orderId = req.body.orderId;
         let rider = await Riders.findOne({_id: req.user._id}) 
         let order = await Order.findOne({_id:orderId });
+        console.log(orderId)
         if(order.deliveryStatus === "RIDER_ASSIGNED"){
-        res.status(500).json({
-            success: false,
-            data: "Order already Accepted"
-        });
-        return;
+            res.status(500).json({
+                success: false,
+                data: "Order already Accepted"
+            });
+            return;
         }
         order.deliveryStatus = "RIDER_ASSIGNED";
         order.riderDetails = rider;
-        order.isPrepaid = true;
         let stateHistory = {
             state: "RIDER_ASSIGNED",
             changedOn: Date.now()
         };
+        order.isRiderAssigned = true; 
         console.log(order);
         order.deliveryStatusChangeHistory.push(stateHistory);
         order.save();
@@ -97,14 +98,6 @@ exports.updateOrderDeliveryStatus = async (req, res, next) => {
     try{
         let state = req.body.state;
         let orderId = req.body.orderId;
-
-        if(!verifyDeliveryState(state, 'DELIVERY')){
-            res.status(400).json({
-                success: false,
-                data: null
-            });
-            return;
-        }
         let order = await Order.findOne({_id: orderId});
 
         if(state === "RIDER_PICKED_UP"){
@@ -144,6 +137,7 @@ exports.acceptOrderRestaurant = async(req, res, next) => {
         let order = await Order.findOne({_id: req.body.orderId, orderStatus: "ORDER_REQUESTED", paymentStatus: "PAYMENT_SUCCESS"});
 
         order.orderStatus = "ORDER_ACCEPTED";
+        order.isPrepaid = true;
         order.orderStatusChangeHistory.push({
             state: "ORDER_ACCEPTED",
             changedOn: Date.now()
